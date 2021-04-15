@@ -2,6 +2,9 @@ const express = require("express");
 
 const router = express.Router();
 
+const reviewsSchema = require("../validators/reviews.validator");
+const validator = require("../middleware/validation.middleware");
+
 router.get("/:space_id", (req, res, next) => {
   res.json({
     hit: `all review on space with id ${req.params.space_id}`,
@@ -14,14 +17,14 @@ router.get("/:space_id/:id", (req, res, next) => {
   });
 });
 
-router.post("/:space_id", (req, res, next) => {
+router.post("/:space_id", reviewsSchema, validator, (req, res, next) => {
   res.json({
     hit: `post review on space with id ${req.params.space_id}`,
     dataSent: req.body,
   });
 });
 
-router.put("/:id", (req, res, next) => {
+router.put("/:id", reviewsSchema, validator, (req, res, next) => {
   res.json({
     hit: `edit review with id ${req.params.id}`,
     dataSent: req.body,

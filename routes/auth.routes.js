@@ -1,31 +1,24 @@
 const express = require("express");
-
 const router = express.Router();
+const methodNotAllowedErr = require("../middleware/errors/methodnotallowed.middleware");
 
-router.post("/signin", (req, res, next) => {
+const validator = require("../middleware/validation.middleware");
+const { signUpSchema, signInSchema } = require("../validators/users.validator");
+
+router.post("/signin", signInSchema, validator, (req, res, next) => {
   res.json({
     sentData: req.body,
   });
 });
 
-router.post("/signup", (req, res, next) => {
+router.post("/signup", signUpSchema, validator, (req, res, next) => {
   res.json({
     sentData: req.body,
   });
 });
 
-router.get("/signin", (req, res, next) => {
-  next({
-    statusCode: 405,
-    message: "Method not Allowed",
-  });
-});
+router.get("/signin", methodNotAllowedErr);
 
-router.get("/signup", (req, res, next) => {
-  next({
-    statusCode: 405,
-    message: "Method not Allowed",
-  });
-});
+router.get("/signup", methodNotAllowedErr);
 
 module.exports = router;
